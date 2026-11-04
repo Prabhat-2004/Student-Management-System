@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body { background: #f4f6f9; font-family: Arial, sans-serif; }
+        .sidebar {
+            min-height: 100vh;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+        }
+        .sidebar h4 { margin-bottom: 30px; }
+        .sidebar a {
+            display: block;
+            color: #dbeafe;
+            text-decoration: none;
+            padding: 11px 12px;
+            border-radius: 7px;
+            margin-bottom: 5px;
+        }
+        .sidebar a:hover { background: #1e40af; color: white; }
+        .main-content { padding: 30px; }
+        .stat-card, .module-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+        .stat-number { font-size: 30px; font-weight: bold; }
+        .module-card a { text-decoration: none; }
+    </style>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+
+        <aside class="col-md-2 sidebar">
+            <h4>🎓 Student MS</h4>
+
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+
+            <hr>
+            <small>STUDENT MANAGEMENT</small>
+            <a href="{% url 'add_student' %}">Add Student</a>
+            <a href="{% url 'student_list' %}">View Students</a>
+
+            <hr>
+            <small>TEACHER MANAGEMENT</small>
+            <a href="{% url 'add_teacher' %}">Add Teacher</a>
+            <a href="{% url 'teacher_list' %}">View Teachers</a>
+
+            <hr>
+            <small>ATTENDANCE MANAGEMENT</small>
+            <a href="{% url 'add_attendance' %}">Add Attendance</a>
+            <a href="{% url 'attendance_list' %}">View Attendance</a>
+
+            <hr>
+            <small>MARKS MANAGEMENT</small>
+            <a href="{% url 'add_marks' %}">Add Marks</a>
+            <a href="{% url 'marks_list' %}">View Marks</a>
+
+            <hr>
+            <small>REPORTS</small>
+            <a href="{% url 'student_results' %}">Results & Reports</a>
+            <a href="/admin/">Admin Panel</a>
+
+            <hr>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100">
+                    Logout
+                </button>
+            </form>
+        </aside>
+
+        <main class="col-md-10 main-content">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2>Dashboard</h2>
+                    <p class="text-muted">
+                        Welcome, {{ request.user.username }}!
+                    </p>
+                </div>
+                <span class="badge bg-success fs-6">Admin</span>
+            </div>
+
+            <!-- Statistics -->
+            <div class="row g-4 mb-4">
+
+                <div class="col-md-3">
+                    <div class="card stat-card p-3">
+                        <h6>Total Students</h6>
+                        <div class="stat-number text-primary">{{ total_students }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card stat-card p-3">
+                        <h6>Total Teachers</h6>
+                        <div class="stat-number text-success">{{ total_teachers }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card stat-card p-3">
+                        <h6>Attendance Records</h6>
+                        <div class="stat-number text-warning">{{ total_attendance }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card stat-card p-3">
+                        <h6>Marks Records</h6>
+                        <div class="stat-number text-danger">{{ total_marks }}</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Quick Access -->
+            <h4 class="mb-3">Quick Access</h4>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <div class="card module-card p-4">
+                        <h5>👨‍🎓 Student Management</h5>
+                        <p class="text-muted">Add and manage student details.</p>
+                        <a href="{% url 'student_list' %}" class="btn btn-primary">
+                            View Students
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card module-card p-4">
+                        <h5>👨‍🏫 Teacher Management</h5>
+                        <p class="text-muted">Manage teacher information.</p>
+                        <a href="{% url 'teacher_list' %}" class="btn btn-success">
+                            View Teachers
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card module-card p-4">
+                        <h5>📅 Attendance Management</h5>
+                        <p class="text-muted">Record and view attendance.</p>
+                        <a href="{% url 'attendance_list' %}" class="btn btn-warning">
+                            View Attendance
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card module-card p-4">
+                        <h5>📝 Marks Management</h5>
+                        <p class="text-muted">Manage examination marks.</p>
+                        <a href="{% url 'marks_list' %}" class="btn btn-danger">
+                            View Marks
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card module-card p-4">
+                        <h5>📊 Results & Reports</h5>
+                        <p class="text-muted">Check student performance.</p>
+                        <a href="{% url 'student_results' %}" class="btn btn-info">
+                            View Results
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card module-card p-4">
+                        <h5>⚙️ Django Admin</h5>
+                        <p class="text-muted">Access administration panel.</p>
+                        <a href="/admin/" class="btn btn-dark">
+                            Open Admin
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Export Reports -->
+            <h4 class="mt-5 mb-3">Download Student Reports</h4>
+
+            <div class="card module-card p-4">
+                <p class="text-muted">
+                    Download all student records in Excel or PDF format.
+                </p>
+
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'export_students_excel' %}"
+                       class="btn btn-success">
+                        <i class="bi bi-file-earmark-excel"></i>
+                        Download Excel
+                    </a>
+
+                    <a href="{% url 'export_students_pdf' %}"
+                       class="btn btn-danger">
+                        Download PDF
+                    </a>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+</body>
+</html>

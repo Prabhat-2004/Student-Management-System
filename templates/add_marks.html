@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student Marks</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .form-container {
+            max-width: 750px;
+            margin: 50px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .form-title {
+            color: #172b4d;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="form-container">
+
+        <h2 class="form-title mb-4">Add Student Marks</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Select Student</label>
+                <select name="student" class="form-select" required>
+                    <option value="">Choose Student</option>
+
+                    {% for student in students %}
+                        <option value="{{ student.id }}">
+                            {{ student.student_id }} - {{ student.first_name }} {{ student.last_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Subject</label>
+                <input type="text" name="subject" class="form-control"
+                       placeholder="Enter subject name" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Total Marks</label>
+                    <input type="number" name="total_marks" class="form-control"
+                           min="1" placeholder="Example: 100" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Obtained Marks</label>
+                    <input type="number" name="obtained_marks" class="form-control"
+                           min="0" placeholder="Example: 85" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Exam Date</label>
+                <input type="date" name="exam_date" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Save Marks
+            </button>
+
+            <a href="{% url 'marks_list' %}" class="btn btn-success">
+                View Marks
+            </a>
+
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                Back
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>
